@@ -1,0 +1,9 @@
+#ifndef __WRITE_BH_H__
+#define __WRITE_BH_H__
+
+#include "beetles_app.h"
+
+__s32 spinor_wrsr(__u8 value1,__u8 value2);
+__s32 DISK_Clear(void)
+
+#endif

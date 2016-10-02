@@ -1,0 +1,41 @@
+/*
+********************************************************************************
+*                                    eMOD
+*                   the Easy Portable/Player Develop Kits
+*                               mod_cedar sub-system
+*                          (module name, e.g.mpeg4 decoder plug-in) module
+*
+*          (c) Copyright 2010-2012, Allwinner Microelectronic Co., Ltd.
+*                              All Rights Reserved
+*
+* File   : dumpData.h
+* Version: V1.0
+* By     : Eric_wang
+* Date   : 2012-3-31
+* Description:
+    一个dump数据的测试类
+********************************************************************************
+*/
+#ifndef _DUMPDATA_H_
+#define _DUMPDATA_H_
+
+typedef struct tag_CDumpData CDumpData;
+typedef __s32 (*CDumpData_WriteData)(CDumpData *thiz, __u8* pData, __s32 nDataSize);    //ret = EPDK_OK, EPDK_FAIL
+typedef __s32 (*CDumpData_Reinit)(CDumpData *thiz);    //ret = EPDK_OK, EPDK_FAIL
+typedef struct tag_CDumpData
+{
+    __s8    *pDumpBuf;
+    __s32   nCurOffset;
+    __s32   nDumpBufSize;
+
+    CDumpData_Reinit    Reinit;
+    CDumpData_WriteData WriteData;
+}CDumpData;
+extern __s32 CDumpData_Init(CDumpData *thiz, __s32 nDumpBufSize);
+extern __s32 CDumpData_Exit(CDumpData *thiz);
+extern CDumpData* newCDumpData(__s32 nDumpBufSize);
+extern void deleteCDumpData(CDumpData *thiz);
+
+
+#endif  /* _DUMPDATA_H_ */
+

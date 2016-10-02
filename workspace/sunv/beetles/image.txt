@@ -1,0 +1,55 @@
+image.cfgD:\workspace\mywork\C700_T2_Ba_Yi\eStudio\Softwares\eDragonEx400\
+D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles 529
+szSysconfig = (null)
+0000000000 szFileList=FILELIST
+filecnt=16
+1111111111111szFileName=ePDKv100.img
+2222222szFileName=D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\\modifycfg.fex
+2222222szFileName=D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\eFex\\sys_config.fex
+2222222szFileName=D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\sys_config.bin
+2222222szFileName=D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\eFex\\usb\\split_xxxx.fex
+2222222szFileName=D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\eFex\\sys_partition.fex
+2222222szFileName=D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\boot0.fex
+2222222szFileName=D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\boot0_sdcard.fex
+2222222szFileName=D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\u-boot.fex
+2222222szFileName=D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\fes1.fex
+2222222szFileName=D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\full_img.fex
+2222222szFileName=D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\verify.fex
+2222222szFileName=D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\eFex\\usb\\usbtool.fex
+2222222szFileName=D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\eFex\\card\\cardtool.fex
+2222222szFileName=D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\eFex\\card\\cardscript.fex
+2222222szFileName=D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\sunxi_mbr.fex
+2222222szFileName=D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\eFex\\card\\dlinfo.fex
+ D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\\modifycfg.fex, COMMON  , MDF_CONFIG000000, 0
+ D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\eFex\\sys_config.fex, COMMON  , SYS_CONFIG100000, 0
+ D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\sys_config.bin, COMMON  , SYS_CONFIG_BIN00, 0
+ D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\eFex\\usb\\split_xxxx.fex, COMMON  , SPLIT_0000000000, 0
+ D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\eFex\\sys_partition.fex, COMMON  , SYS_CONFIG000000, 0
+ D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\boot0.fex, BOOT    , BOOT0_0000000000, 0
+ D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\boot0_sdcard.fex, 12345678, 1234567890BOOT_0, 0
+ D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\u-boot.fex, 12345678, UBOOT_0000000000, 0
+ D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\fes1.fex, FES     , FES_1-0000000000, 0
+ D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\full_img.fex, 12345678, FULLIMG_00000000, 0
+ D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\verify.fex, RFSFAT16, VFULLIMG_0000000, 0
+ D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\eFex\\usb\\usbtool.fex, PXTOOLSB, xxxxxxxxxxxxxxxx, 0
+ D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\eFex\\card\\cardtool.fex, 12345678, 1234567890cardtl, 0
+ D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\eFex\\card\\cardscript.fex, 12345678, 1234567890script, 0
+ D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\beetles\sunxi_mbr.fex, 12345678, 1234567890___MBR, 0
+ D:\workspace\mywork\C700_T2_Ba_Yi\SDK_C700_test\workspace\sunv\eFex\\card\\dlinfo.fex, 12345678, 1234567890DLINFO, 0
+ret=0 111
+length=1469 0
+length=42384 0
+length=29104 0
+length=512 0
+length=2114 0
+length=24576 0
+length=24576 0
+length=245760 0
+length=5792 0
+length=7995392 0
+length=4 0
+length=122368 0
+length=81920 0
+length=2014 0
+length=65536 0
+length=16384 0

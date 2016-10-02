@@ -1,0 +1,455 @@
+
+
+
+#include "beetles_app.h"
+#include "Explorer.h"
+#include "Explorer_UI.h"
+
+
+//libaiao 
+
+static explorer_viewer_ui_t  explr_viewer_ui_400_240 =
+{    
+    //layer window
+    { 
+        PIXEL_COLOR_ARGB8888,       //fmt 
+        { 400, 240 },               //fb size
+        { 0, 0, 400, 240 },         //src rect
+        { 0, 0, 400, 240 },         //scn rect
+        { 0 },                      //reserved
+    },
+        
+    //menuview attribute  
+    { 0, 0, 400, 240 },             //menuview(frame window)    
+    { 0, 0, 400, 240 },             //browser bg
+    { 0, 0, 400, 20  },              //browser bg top
+    { 0, 0, 0, 	0 },                 //browser bg bottom
+    { 0, 0, 0,  0 },              //browser bg left
+    
+    { 391,	8,	7,	224},            //scroll bg rect
+    { 393,	22,	3,	194},      		 //scroll rect
+      6, 	1, 	6,                        //scroll head/body/tail height
+
+    { 0, 8, 390, 240},        //(the whole listbar rectangle)
+    
+    //list item attribute，以下坐标为点对于listbar rectangle的相对坐标   
+    { 
+    	{ 136, 8, 254, 200},
+        //{ 8 - 8 , 20 - 20, 754, 76 },       		//item rect                
+        { 0, 0, 254, 40 },       			//item rect                
+        { 0 , 0, 254, 2 },        			//item_top_line;
+        { 0 , 0, 254, 2 },        			//item_bottom_line;
+        { 0 , 2, 2, 38},       				//item_dividing_line;
+        
+        { 24, 7, 15, 15 },        			//icon rect 
+        { 0, 0, 50, 30 },       			//miniature rect, 缩略图 UI 参数
+        
+        { 24+35, 0, 254 -24 -35 - 2 - 7, 30 },  //text rect
+        
+        { 208 - 8, 22 - 20, 550, 34 },      //title rect
+        { 208 - 8, 60 - 20, 200, 34 },      //size rect 
+        { 408 - 8, 60 - 20, 200, 34 },      //time rect
+        { 608 - 8, 60 - 20, 150, 34 },      //number rect
+        
+        { 7, 5, 254, 30 },      			//focus icon rect(select picture)
+        { 24, 73, 78, 69 },					//媒体类型图标位置(显示在左边区域的大图标)        
+    },
+    
+    //square item attribute，以下坐标为点对于menu的相对坐标  
+    {
+	    { 0, 8, 390, 240},        			//(the whole listbar rectangle)
+        { 0, 0, 130, 80 },       			//item rect in listbar
+        { 8, 0, 112, 71 },      			//focus rect
+        { 55, 20, 106, 65 },       			//icon rect
+        { 11, 3, 106, 65 },       			//miniature rect
+        { 13, 3 + 71 - 35, 100, 30},      	//title rect
+    },        
+    
+    //icon table    
+    {				//ID															res	handle,    	res buffer
+    
+		{ NULL,           	NULL,  				 NULL },    //调色板
+        { NULL,           NULL,  				 NULL },    //背景图
+
+        { ID_EXPLORER_VIDEO_FILE_BMP,      		NULL,  				 NULL }, 	//  video文件标志                                                     				
+        { ID_EXPLORER_VIDEO_ICON_UNFOCUSED_BMP, NULL,  				 NULL }, 	// video文件icon图标,与文件名一起的                                                      				
+        { ID_EXPLORER_VIDEO_ICON_FOCUSED_BMP,   NULL,  				 NULL }, 	//                                                       				        
+
+        { ID_EXPLORER_MUSIC_FILE_BMP,      		NULL,  				 NULL }, 	// music文件标志                                                     				
+		{ ID_EXPLORER_MUSIC_ICON_UNFOCUSED_BMP, NULL,  				 NULL }, 	// music文件icon图标,与文件名一起的                                                      				        
+		{ ID_EXPLORER_MUSIC_ICON_FOCUSED_BMP, 	NULL,  				 NULL }, 	// music文件icon图标,与文件名一起的                                                      				        		
+
+        { ID_EXPLORER_PHOTO_FILE_BMP,      		NULL,  				 NULL }, 	// picture文件标志                                                     				
+		{ ID_EXPLORER_PHOTO_ICON_UNFOCUSED_BMP, NULL,  				 NULL }, 	// picture文件icon图标,与文件名一起的                                                      				        
+		{ ID_EXPLORER_PHOTO_ICON_FOCUSED_BMP, 	NULL,  				 NULL }, 	// picture文件icon图标,与文件名一起的                                                      				        				
+
+        { ID_EXPLORER_EBOOK_FILE_BMP,      		NULL,  				 NULL }, 	// Ebook文件标志                                                     				
+		{ ID_EXPLORER_EBOOK_ICON_UNFOCUSED_BMP, NULL,  				 NULL }, 	// Ebook文件icon图标,与文件名一起的                                                      				        
+		{ ID_EXPLORER_EBOOK_ICON_FOCUSED_BMP, 	NULL,  				 NULL }, 	// Ebook文件icon图标,与文件名一起的                                                      				        				
+		
+		{ ID_EXPLORER_DELETE_ICON_UNFOCUSED_BMP,NULL,  			 	 NULL }, 	// 删除文件icon图标,
+		{ ID_EXPLORER_DELETE_ICON_FOCUSED_BMP, 	NULL,  				 NULL }, 	// 删除文件icon图标,
+
+        { ID_EXPLORER_LIST_ITEM_FOCUS_BG_BMP,   NULL,  				 NULL }, 	// 条目焦点背景框图
+        { ID_EXPLORER_SQUAREFOCUS_BMP,      	NULL,  				 NULL }, 	//缩略图焦点框图,目前暂时未用
+        
+        { ID_EXPLORER_LIST_SCROLL_BG_BMP,       NULL,  				 NULL }, 	// scroll bar 背景图
+        { ID_EXPLORER_LIST_SCROLL_HEAD_BMP,     NULL,  				 NULL }, 	// scroll bar 头部icon
+        { ID_EXPLORER_LIST_SCROLL_BODY_BMP,     NULL,  				 NULL }, 	// scroll bar , 滑块，高度必须为1
+        { ID_EXPLORER_LIST_SCROLL_TAIL_BMP,     NULL,  				 NULL }, 	// scroll bar , 滑块，高度必须为1        
+
+		{ ID_EXPLORER_LONG_STR_SCROLL_BG_BMP,     NULL,  				 NULL }, 	// 长字符串滚动背景
+        { 0,                                    NULL,  				 NULL }      //browser_icon_max
+    },                                                 				
+};
+
+//获得整个explorer AP设计的UI参数
+explorer_viewer_ui_t* explorer_get_viewer_ui_param(void)
+{	
+		return &(explr_viewer_ui_400_240);
+}
+
+RECT* explorer_get_listview_ui_param(void)
+{	
+		return &(explr_viewer_ui_400_240.listview);
+}
+
+//获得list 中 item 设计的UI参数
+explorer_list_item_ui_param_t * explorer_get_list_item_ui_param(void)
+{	
+		return &(explr_viewer_ui_400_240.list_item_ui_param);	
+}
+
+//获得list 中 square 设计的UI参数
+explorer_square_item_ui_param_t * explorer_get_square_item_ui_param(void)
+{	
+		return &(explr_viewer_ui_400_240.square_item_ui_param);	
+}
+
+/*
+************************************************************************************************************************
+*Function	:         void* explorer_get_listview_icon_res(__u32 index)
+*
+*Description	: 		
+*					
+*Arguments  	: 		
+*
+*Return     	: 	
+*
+************************************************************************************************************************
+*/
+void* explorer_get_listview_icon_res(__u32 index)
+{
+    explorer_icon_data_t *icon_table = NULL;
+    
+    
+    icon_table = explr_viewer_ui_400_240.icon_table;
+        
+    //__msg("----icon_id: %d, res_id: %d\n", index, icon_table[index].res_id);
+    if(icon_table == NULL)
+    {
+        return NULL;
+    }    
+    else if(icon_table[index].res_id == 0)
+    {
+        return NULL;
+    }    
+    else if(icon_table[index].res_handle == NULL)
+    {
+        icon_table[index].res_handle = theme_open(icon_table[index].res_id);
+        icon_table[index].res_buffer = theme_hdl2buf(icon_table[index].res_handle);                        
+        return icon_table[index].res_buffer;
+    }
+    else
+    {
+    	//--------------------------------------------------------------------------
+    	//加这个判断仅仅是为了避开listbar, 684行，GUI_BitStringDrawEx()冲掉该图片buffer
+    	//后续应彻底根除
+    	//if(index == ID_EXP_LONG_STR_SCROLL_BG)
+    	/*
+    	{
+    		theme_close(icon_table[index].res_handle); 
+	        icon_table[index].res_handle = theme_open(icon_table[index].res_id);
+	        icon_table[index].res_buffer = theme_hdl2buf(icon_table[index].res_handle);                        
+	        return icon_table[index].res_buffer;			
+    	}
+    	*/
+    	//--------------------------------------------------------------------------		
+        return icon_table[index].res_buffer;
+    }
+}
+
+/*
+************************************************************************************************************************
+*Function	:         __s32 explorer_free_listview_icon_res(void)
+*
+*Description	: 		
+*					
+*Arguments  	: 		
+*
+*Return     	: 	
+*
+************************************************************************************************************************
+*/
+__s32 explorer_free_listview_icon_res(void)
+{    
+    __s32 i = 0;
+    explorer_icon_data_t *icon_table = NULL;
+    icon_table = explr_viewer_ui_400_240.icon_table;
+    
+    if(icon_table == NULL)
+    {
+        return EPDK_FAIL;
+    }
+    else
+    {
+        for(i = 0; i < BROWSER_ICON_MAX; i++)
+        {
+            if(icon_table[i].res_handle != NULL)
+            {
+                theme_close(icon_table[i].res_handle); 
+                icon_table[i].res_handle = NULL;
+                icon_table[i].res_buffer = NULL;
+            }
+        }        
+        return EPDK_OK;       
+    }
+}
+
+//获得Explorer 窗口layer size
+__s32 explorer_get_screen_rect(RECT *screen_rect)
+{	
+	explorer_viewer_ui_t *ui_param;
+	ui_param = explorer_get_viewer_ui_param();
+	
+	screen_rect->x = ui_param->layer.scn_rect.x;
+	screen_rect->y = ui_param->layer.scn_rect.y;
+	screen_rect->width = ui_param->layer.scn_rect.width;
+	screen_rect->height = ui_param->layer.scn_rect.height;
+	return EPDK_OK;
+}
+
+
+
+//获得缩略图区域(according to the view mode of list)
+__s32 explorer_get_item_miniature_rect(explr_list_para_t *para, RECT *miniature_rect)
+{
+	explorer_viewer_ui_t *ui_param;
+	ui_param = explorer_get_viewer_ui_param();	
+	
+	switch(para->view_mode)
+	{
+		case EXPLR_LIST_MODE:
+			miniature_rect->x = ui_param->list_item_ui_param.miniature_rect.x;
+			miniature_rect->y = ui_param->list_item_ui_param.miniature_rect.y;
+			miniature_rect->width = ui_param->list_item_ui_param.miniature_rect.width;
+			miniature_rect->height = ui_param->list_item_ui_param.miniature_rect.height;			
+			break;
+		case EXPLR_SQUARE_MODE:
+			miniature_rect->x = ui_param->square_item_ui_param.miniature_rect.x;
+			miniature_rect->y = ui_param->square_item_ui_param.miniature_rect.y;
+			miniature_rect->width = ui_param->square_item_ui_param.miniature_rect.width;
+			miniature_rect->height = ui_param->square_item_ui_param.miniature_rect.height;			
+			break;			
+	}	
+	return EPDK_OK;
+}
+
+//获得显示文本区域
+__s32 explorer_get_item_text_rect(explr_list_para_t *para, RECT *text_rect)
+{
+	explorer_viewer_ui_t *ui_param;
+	ui_param = explorer_get_viewer_ui_param();	
+	
+	switch(para->view_mode)
+	{
+		case EXPLR_LIST_MODE:
+			text_rect->x = ui_param->list_item_ui_param.text_rect.x;
+			text_rect->y = ui_param->list_item_ui_param.text_rect.y;
+			text_rect->width = ui_param->list_item_ui_param.text_rect.width;
+			text_rect->height = ui_param->list_item_ui_param.text_rect.height;			
+			break;
+		case EXPLR_SQUARE_MODE:
+			text_rect->x = ui_param->square_item_ui_param.title_rect.x;
+			text_rect->y = ui_param->square_item_ui_param.title_rect.y;
+			text_rect->width = ui_param->square_item_ui_param.title_rect.width;
+			text_rect->height = ui_param->square_item_ui_param.title_rect.height;			
+			break;			
+		default:
+			break;
+	}	
+	return EPDK_OK;
+}
+
+//获得条目开始的图标显示区域
+__s32 explorer_get_item_icon_rect(explr_list_para_t *para, RECT *icon_rect)
+{
+	explorer_viewer_ui_t *ui_param;
+	ui_param = explorer_get_viewer_ui_param();	
+	
+	switch(para->view_mode)
+	{
+		case EXPLR_LIST_MODE:
+			icon_rect->x = ui_param->list_item_ui_param.icon_rect.x;
+			icon_rect->y = ui_param->list_item_ui_param.icon_rect.y;
+			icon_rect->width = ui_param->list_item_ui_param.icon_rect.width;
+			icon_rect->height = ui_param->list_item_ui_param.icon_rect.height;			
+			break;
+		case EXPLR_SQUARE_MODE:
+			icon_rect->x = ui_param->square_item_ui_param.icon_rect.x;
+			icon_rect->y = ui_param->square_item_ui_param.icon_rect.y;
+			icon_rect->width = ui_param->square_item_ui_param.icon_rect.width;
+			icon_rect->height = ui_param->square_item_ui_param.icon_rect.height;			
+			break;			
+		default:
+			break;
+	}	
+	return EPDK_OK;
+}
+
+
+//获得焦点条目图标
+__s32 explorer_get_item_focus_icon_rect(explr_list_para_t *para, RECT *focus_icon_rect)
+{
+	explorer_viewer_ui_t *ui_param;
+	ui_param = explorer_get_viewer_ui_param();	
+	
+	switch(para->view_mode)
+	{
+		case EXPLR_LIST_MODE:
+			focus_icon_rect->x = ui_param->list_item_ui_param.focus_icon_rect.x;
+			focus_icon_rect->y = ui_param->list_item_ui_param.focus_icon_rect.y;
+			focus_icon_rect->width = ui_param->list_item_ui_param.focus_icon_rect.width;
+			focus_icon_rect->height = ui_param->list_item_ui_param.focus_icon_rect.height;			
+			break;
+		case EXPLR_SQUARE_MODE:
+			focus_icon_rect->x = ui_param->square_item_ui_param.focus_rect.x;
+			focus_icon_rect->y = ui_param->square_item_ui_param.focus_rect.y;
+			focus_icon_rect->width = ui_param->square_item_ui_param.focus_rect.width;
+			focus_icon_rect->height = ui_param->square_item_ui_param.focus_rect.height;			
+			break;			
+		default:
+			break;
+	}	
+	return EPDK_OK;
+}
+
+
+//画背景图片
+__s32 explorer_draw_background(explr_list_para_t *list_para)
+{
+	void *pic_buf;		
+	__s32 picX, picY;		
+		
+	//ret = explorer_get_item_focus_icon_rect(list_para, &FocusIconRect);
+
+	picX = 0;
+	picY = 0;
+	pic_buf = explorer_get_listview_icon_res(ID_EXP_BACKGROUND);			//draw select border
+	//picW =  GUI_BMP_GetXSize(pic_buf);										//获得图片宽
+	//picH =  GUI_BMP_GetYSize(pic_buf);										//获得图片高度
+	if(pic_buf != NULL)
+	{
+		GUI_BMP_Draw(pic_buf, picX, picY);	
+	}
+	return EPDK_OK;
+}
+
+__s32 explorer_draw_FileTypeIcon(explr_list_para_t *list_para)
+{
+	void *pic_buf;		
+	__s32 picX, picY;		
+	explorer_viewer_ui_t *ui_param;
+	ui_param = explorer_get_viewer_ui_param();
+	//GUI_LyrWinSel(list_para->BG_layer);	
+	//com_set_palette_by_id(ID_EXPLORER_PALETTE_BMP);	
+	//ret = explorer_get_item_focus_icon_rect(list_para, &FocusIconRect);
+	picX = ui_param->list_item_ui_param.media_type_rect.x;		//24
+	picY = ui_param->list_item_ui_param.media_type_rect.y;		//73
+	switch(list_para->media_type)
+	{
+		case RAT_MEDIA_TYPE_VIDEO:
+			pic_buf = explorer_get_listview_icon_res(ID_EXP_VIDEO_FILE);			//draw select border
+			break;			
+		case RAT_MEDIA_TYPE_PIC:
+			pic_buf = explorer_get_listview_icon_res(ID_EXP_PHOTO_FILE);			//draw select border
+			break;
+		case RAT_MEDIA_TYPE_AUDIO:	
+			pic_buf = explorer_get_listview_icon_res(ID_EXP_MUSIC_FILE);			//draw select border
+			break;			
+		case RAT_MEDIA_TYPE_EBOOK:
+			pic_buf = explorer_get_listview_icon_res(ID_EXP_EBOOK_FILE);			//draw select border
+			break;			
+		default:
+			break;
+		
+	}
+	//picW =  GUI_BMP_GetXSize(pic_buf);										//获得图片宽
+	//picH =  GUI_BMP_GetYSize(pic_buf);										//获得图片高度		
+	GUI_BMP_Draw(pic_buf, picX, picY);	
+	return EPDK_OK;
+}
+
+void *explorer_get_file_item_icon(explorer_view_mode_e view_mode, rat_media_type_t media_type, exp_icon_status_e status)
+{
+	void *pic_buf = NULL;		
+	//__s32 picX, picY;		
+	//explorer_viewer_ui_t *ui_param;
+	//ui_param = explorer_get_viewer_ui_param();
+
+	//picX = ui_param->list_item_ui_param.icon_rect.x;
+	//picY = ui_param->list_item_ui_param.icon_rect.y;
+	
+	switch(media_type)
+	{
+		case RAT_MEDIA_TYPE_VIDEO:
+			if(status == FOCUSED)
+			{
+				pic_buf = explorer_get_listview_icon_res(ID_EXP_VIDEO_ICON_FOCUSED);			
+			}
+			else  if(status == UNFOCUSED)
+			{
+				pic_buf = explorer_get_listview_icon_res(ID_EXP_VIDEO_ICON_UNFOCUSED);			
+			}
+			break;			
+		case RAT_MEDIA_TYPE_PIC:
+			if(status == FOCUSED)
+			{
+				pic_buf = explorer_get_listview_icon_res(ID_EXP_PHOTO_ICON_FOCUSED);			
+			}
+			else
+			{
+				pic_buf = explorer_get_listview_icon_res(ID_EXP_PHOTO_ICON_UNFOCUSED);			
+			}
+			break;
+		case RAT_MEDIA_TYPE_AUDIO:	
+			if(status == FOCUSED)
+			{
+				pic_buf = explorer_get_listview_icon_res(ID_EXP_MUSIC_ICON_FOCUSED);			
+			}
+			else
+			{
+				pic_buf = explorer_get_listview_icon_res(ID_EXP_MUSIC_ICON_UNFOCUSED);			
+			}
+			break;			
+		case RAT_MEDIA_TYPE_EBOOK:
+			if(status == FOCUSED)
+			{
+				pic_buf = explorer_get_listview_icon_res(ID_EXP_EBOOK_ICON_FOCUSED);			
+			}
+			else
+			{
+				pic_buf = explorer_get_listview_icon_res(ID_EXP_EBOOK_ICON_UNFOCUSED);			
+			}
+			break;			
+		default:
+			break;		
+	}
+	//picW =  GUI_BMP_GetXSize(pic_buf);										//获得图片宽
+	//picH =  GUI_BMP_GetYSize(pic_buf);										//获得图片高度		
+	if(pic_buf != NULL)
+	{
+		//GUI_BMP_Draw(pic_buf, picX, picY);
+	}
+	return pic_buf;
+}

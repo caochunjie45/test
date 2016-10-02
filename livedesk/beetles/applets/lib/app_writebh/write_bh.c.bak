@@ -1,0 +1,109 @@
+#include "write_bh.h"
+
+#define SPINOR_WORK_MODE (3)
+#define SPINOR_CHIP_SELECT (0x01)
+
+
+/********************************************************************************************************
+* Function   : spinor_wren
+* Description: write enable
+* Arguments  : 
+* Return     : 
+*********************************************************************************************************/
+static __s32 spinor_wren(void)
+{
+	__u8 sdata[4] = {0};
+	__spi_dev_set_xfer_t spi_xfer;
+
+	sdata[0] = 0x06;    //spinor_cmd_set[spinor_info->cmd_index].WREN; //写使能命令
+	spi_xfer.tx_addr   = sdata;
+	spi_xfer.tx_count  = 1;
+	spi_xfer.rx_addr   = NULL;
+	spi_xfer.rx_count  = 0;
+	spi_xfer.work_mode = SPINOR_WORK_MODE;
+	spi_xfer.work_clk  = 33000000;//spinor_info->freq;
+	spi_xfer.work_slot = SPINOR_CHIP_SELECT;
+	spi_xfer.reserved  = NULL;
+
+	if (eLIBs_fioctrl(hfile, SPI_DEV_CMD_MASTER_RW, 0, &spi_xfer))
+	{
+		return EPDK_FAIL;
+	}
+
+	return EPDK_OK;
+}
+
+
+
+/********************************************************************************************************
+* Function   : spinor_wrsr
+* Description: write status register  写保护
+* Arguments  : 
+* Return     : 
+*********************************************************************************************************/
+
+static __s32 spinor_wrsr(__u8 value1,__u8 value2)
+{
+	__u8 sdata[4] = {0};
+	__spi_dev_set_xfer_t spi_xfer;
+	ES_FILE *pfile=NULL;
+	
+	pfile = eLIBs_fopen("b:\\BUS\\SPI0", "r+");
+	if(NULL == pfile)
+	{
+		__wrn("why fail, check it \n");
+		return EPDK_FAIL;
+	}
+
+	spinor_wren();
+	
+	sdata[0] = 0x01;//spinor_cmd_set[spinor_info->cmd_index].WRSR; 写状态命令
+	sdata[1] = value1;//状态寄存器低8位PB4到PB0的值 4MB GD为例 = 0b00010=2 为对0-63BLOCK写保护,即3968K,最后128K为用户区数据，不能写保护
+	sdata[2] = value2;//状态寄存器CMP的值 ,以4MB GD为例 CMP=1, PB4-PB0 = 0b00010=2才能对0-61block写保护
+	
+	spi_xfer.tx_addr   = sdata;
+	spi_xfer.tx_count  = 3;
+	spi_xfer.rx_addr   = NULL;
+	spi_xfer.rx_count  = 0;
+	spi_xfer.work_mode = SPINOR_WORK_MODE;
+	spi_xfer.work_clk  = 33000000;//spinor_info->freq;
+	spi_xfer.work_slot = SPINOR_CHIP_SELECT;
+	spi_xfer.reserved  = NULL;
+
+	if (eLIBs_fioctrl(pfile, SPI_DEV_CMD_MASTER_RW, 0, &spi_xfer))
+	{
+		return EPDK_FAIL;
+	}
+	if(NULL != pfile)
+	{
+		eLIBs_fclose(pfile);
+	}
+	
+
+	return EPDK_OK;
+}
+
+/******************************************************************************************/
+/******************************************************************************************/
+/******************************************************************************************/
+/******************************************************************************************/
+
+
+__s32 DISK_Clear(void)
+{
+	__s32 ret;
+	ES_FILE *hFile;
+
+	hFile = eLIBs_fopen("b:\\STORAGE\\SPINOR", "rb");
+    if (hFile == NULL)
+    {
+        __wrn("open NOR file failed\n");
+        return EPDK_FAIL;
+    }
+    
+    ret = eLIBs_fioctrl(hFile, DEV_IOC_USR_PHY_ERASE, 0, 0);
+    
+    eLIBs_fclose(hFile);
+
+	return ret;
+}

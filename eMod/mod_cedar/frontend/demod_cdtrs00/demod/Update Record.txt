@@ -1,0 +1,46 @@
+20130411 V21:
+1，更改WorkMode的保存方式，删除读寄存器，改为保存为静态变量
+2，地面模式时添加初始化，0x004B寄存器写0x0B
+3，地面模式时添加0x0022寄存器机制。在多载波，寄存器写为0x54，单载波，寄存器写为0x74
+4，更改了HD2311_Init()函数的函数调用顺序
+
+20130520 V22:
+1，添加部分寄存器的初始化，0x0063寄存器写0x60，0x00EE寄存器写0x1F，0x00EF寄存器写0xFF。
+2，将写寄存器的变量统一为WriteData
+3，更改地面模式时0x0022寄存器的赋值机制。在多载波，寄存器高四位写为b0101，单载波，高四位写b0111。
+4，在HDIC2311_User_Define.c中添加部分注释
+5，添加#define HDIC2311_DEBUG_INFO_OPEN的定义，调试必要时可打开定义监控信号状态
+6，添加Monitor_task
+
+20130520 V23：
+1，修正HDIC2311_SetTsFormat错误。
+2，修正无信号判断机制 if((status&0xf0) > 0x20) 
+3，添加HDICTBX_Print的定义，需要客户实现。
+
+20130617 V24
+1,更新DEMOD和TUNER锁频函数的实现，定义为BOOL类型，信号锁住返回TRUE，失锁返回FALSE。
+2,更新HDIC2311_GetNCOValue()的实现。
+3,将客户需要调用的函数声明放在HDIC2311_User.h中。
+4,添加手动模式锁频函数HD2311_DTMBManualSetFrequency()。
+5,将HDIC2311_Init初始化配置赋值的每一句话后面都加上注释，说明这些配置还有哪些其他选项。
+6,将HDIC2311_DEBUG_INFO_OPEN 的打印打在一行内。
+7,增加无信号2秒退出注释。
+8,HDIC_TS_DATA_SAMPLE_RISING注释错误修改。
+
+20130619 V25
+1.修正了HDIC2311_GetSignalSNRMC的计算公式出现负值情况。
+2.修正了HDIC2311_GetSignalSNRSC的计算公式出现负值情况。
+
+20130819 V26
+1. 针对特定信道模型，优化部分参数
+2. 添加对Log10的查表计算，如果系统不支持Log10的运算，可以使用查表函数。
+3. 在芯片状态到0x8*后再更新0x0022寄存器的值。
+4. 修改监控信息的打印方式
+
+20131031 V27
+1.HDIC2311_SetWorkMode 函数中，添加21寄存器写40。作用是更改AGC的检测功率方式，更改后是在8MHz带宽滤波前检测中频功率。
+2.插入一个空函数：HDIC2311_PLLReset();此函数作用是对STB_N/PLL_RST管脚复位，客户可使用GPIO，在上电时对standby管脚复位
+3.修复 HDIC2311_DTMBSetFrequency  和 HDIC2311_DTMBManualSetFrequency 返回值问题。
+
+20131202 V28
+添加设置系统带宽的函数。

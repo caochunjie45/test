@@ -1,0 +1,2 @@
+--scatter=D:\winners\ePDK\livedesk\beetles\init\config\config.sct
+--keep=*.o(INIT_API_TBL)

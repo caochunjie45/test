@@ -1,0 +1,32 @@
+;/*
+;*********************************************************************************************************
+;*                                                    MELIS
+;*                                    the Easy Portable/Player Develop Kits
+;*                                               makefile Module
+;*
+;*                                  (c) Copyright 2010-2014, Calder.Chen China
+;*                                             All Rights Reserved
+;*
+;* File    : config_debug.sct
+;* By      : CC
+;* Version : v1.0
+;* Date    : 2011-01-01 08:30
+;* Descript:
+;* Update  :    date            auther          ver         notes
+;*           2011-01-01           CC            1.0     create this file.
+;*********************************************************************************************************
+;*/
+
+LO_FIRST 0xe4a00000 0x100000
+{
+    EXEC_MOD  0xe4a00000
+    {
+        * (+RO)
+        * (+RW)
+        * (+ZI)
+	}
+    MAGIC  0xFFFF0000
+    {
+        * (MAGIC)
+    }
+}

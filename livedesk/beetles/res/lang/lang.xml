@@ -1,0 +1,27 @@
+<OSDTable>
+<Groups count="14">
+<OSDItem name="init" startid="1" maxid="1000" file="init\init.txt"/>
+<OSDItem name="mainmenu" startid="1001" maxid="2000" file="mainmenu\mainmenu.txt"/>
+<OSDItem name="explorer" startid="2001" maxid="3000" file="explorer\explorer.txt"/>
+<OSDItem name="movie" startid="3001" maxid="4000" file="movie\movie.txt"/>
+<OSDItem name="music" startid="4001" maxid="5000" file="music\music.txt"/>
+<OSDItem name="setting" startid="5001" maxid="6000" file="setting\setting.txt"/>
+<OSDItem name="photo" startid="6001" maxid="7000" file="photo\photo.txt"/>
+<OSDItem name="ebook" startid="7001" maxid="8000" file="ebook\ebook.txt"/>
+<OSDItem name="record" startid="8001" maxid="9000" file="record\record.txt"/>
+<OSDItem name="fm" startid="9001" maxid="10000" file="fm\fm.txt"/>
+<OSDItem name="dialog" startid="10001" maxid="11000" file="dialog\dialog.txt"/>
+<OSDItem name="dtv" startid="11001" maxid="12000" file="dtv\dtv.txt"/>
+<OSDItem name="loading" startid="12001" maxid="13000" file="loading\loading.txt"/>
+<OSDItem name="widget" startid="13001" maxid="14000" file="widget\widget.txt"/>
+
+</Groups>
+<LangType count="4">
+<LangItem name="ChineseS" langId="0x410"/>
+<LangItem name="English" langId="0x400"/>
+<LangItem name="Portuguese" langId="0x490"/>
+<LangItem name="Spanish" langId="0x460"/>
+
+</LangType>
+<Output bin=".\lang.bin" head=".\lang.h"/>
+</OSDTable>

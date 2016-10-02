@@ -1,0 +1,319 @@
+/*
+**************************************************************************************************************
+*											         ePDK
+*						            the Easy Portable/Player Develop Kits
+*									           desktop system 
+*
+* File    	: 	FileList
+*		
+* By      	: 	Libaiao
+* Func	: 
+* Version	: 	v1.0
+* ============================================================================================================
+* 2010-6-5 	15:24:52  Libaiao  create this file, implements the fundemental interface;
+**************************************************************************************************************
+*/
+
+#include "beetles_app.h"
+
+#include "FileList.h"
+
+
+/*
+************************************************************************************************************************
+*Function	:           
+*
+*Description	: 		
+*					
+*Arguments  	: 		
+*
+*Return     	: 	
+*
+************************************************************************************************************************
+*/
+static __s32 FileList(void)
+{
+	file_item_t *item;
+	file_list_t *list;
+				
+	return EPDK_OK;
+}
+
+//根据搜索到的文件信息, 新建一个文件条目,存储文件或文件夹相关的信息
+file_item_t* new_file_item(ES_DIRENT   *pDirent)
+{
+	file_item_t* file_item = NULL;
+
+	if(pDirent == NULL)
+	{
+		return NULL;
+	}
+	
+	file_item = (file_item_t*)eLIBs_malloc(sizeof(file_item_t));
+	if(file_item  == NULL)
+	{
+		__err("memory is not enough for new a file list\n");
+		return NULL;
+	}
+	eLIBs_memset(file_item, 0, sizeof(file_item_t));
+	
+	//file_item->name_len = eLIBs_strlen(pDirent->d_name);
+	if(file_item->name_len != 0)
+	{
+		file_item->name = (char*)eLIBs_malloc(file_item->name_len);
+		eLIBs_strcpy(file_item->name, pDirent->d_name);
+	}
+	
+	file_item->file_size = pDirent->d_size;
+	file_item->fatdirattr = pDirent->fatdirattr;	
+	return file_item;
+}
+
+//删除一个文件条目,释放相关的内存
+__s32 delete_file_item(file_item_t* file_item)
+{
+	if(file_item == NULL)
+	{
+		return EPDK_FAIL;
+	}
+	//if(file_item->name_len != 0)
+	{
+		if(file_item->name != NULL)
+		{
+			//eLIBs_free(file_item->name, file_item->name_len);
+			eLIBs_free(file_item->name);
+		}
+	}
+	//eLIBs_Bfree(file_item, sizeof(file_item));	
+	eLIBs_free(file_item);	
+	return EPDK_OK;
+}
+//-------------------------------------------------------------------------------
+//function		:
+//descriptions		: 创建一个新的文件列表，该函数搜索指定目录下所有文件夹和文件
+//							该函数执行时间由文件个数决定
+//arguments		:	ext_para, 为扩展参数
+//return 			: 返回搜索到文件的个数,
+//-------------------------------------------------------------------------------
+__s32  new_file_list(const char *path, file_item_t** pp_item_list, void *ext_para)
+{
+    ES_DIRENT   *pDirent = NULL;
+    ES_DIR      *pDir = NULL;
+	file_item_t* list = NULL;
+	file_item_t* first = NULL;
+	file_item_t* next = NULL;
+    __u32 count = 0;
+	
+    pDir = eLIBs_opendir(path);
+    if( pDir == NULL )
+    {
+     return 0;
+    }
+    eLIBs_rewinddir(pDir);
+
+    pDirent = eLIBs_readdir(pDir);				//获得第一个文件或文件夹
+	if(pDirent == NULL)
+	{
+		return 0;
+	}
+	
+	first = new_file_item(pDirent);
+	if(first == NULL)
+	{
+		return 0;
+	}
+	list = first;
+	*pp_item_list = first;						//列表首地址返回给调用者
+	count++;	
+	while(1)
+	{
+	    pDirent = eLIBs_readdir(pDir);
+		if(pDirent == NULL)
+		{
+			break;
+		}
+		next = new_file_item(pDirent);
+		
+		if(next != NULL)
+		{		
+			list->next = next;
+			
+			next->previous = list;
+			list = next;			
+			count++;
+		}
+		else
+		{
+			break;
+		}
+	}
+	next->next = first;
+	first->previous = next;		//形成双向链表
+    eLIBs_closedir(pDir);  			
+	return count;	
+}
+
+//删除一个文件列表(使用链表删除)
+//item_list = 列表首地址
+//total = 总类表个数
+__s32 delete_file_list(file_item_t  *item_list, __u32 total)
+{
+	__u32 i = 0;
+	file_item_t* list = item_list;
+	file_item_t* temp = NULL;
+	if(item_list == NULL)
+	{
+		return EPDK_FAIL;	
+	}	
+
+	
+	for(i = 0; i < total; i++)
+	{
+		temp = list->next;				//先保存下一个条目地址
+		if(temp!= NULL)
+		{
+			delete_file_item(list);
+			list = temp;
+		}
+		else
+		{
+			break;
+		}
+	}
+	return EPDK_OK;	
+}
+
+
+/*
+
+char* eLIBs_find_first( const char *dirname, ES_DIR **ppDir )
+{
+    ES_DIRENT   *direntp = NULL;
+    ES_DIR      *pDir = NULL;
+
+    pDir = eLIBs_opendir(dirname);
+    if( pDir == NULL )
+    {
+     return NULL;
+    }
+    eLIBs_rewinddir(pDir);
+
+    direntp = eLIBs_readdir(pDir);
+    if( !(direntp->fatdirattr & FSYS_ATTR_DIRECTORY) )
+    {
+        *ppDir = pDir;
+        return direntp->d_name;
+    }
+    else
+    {
+        eLIBs_rewinddir(pDir);
+        eLIBs_closedir(pDir);
+        *ppDir = NULL;
+        return NULL;
+    }
+}
+
+
+char* eLIBs_find_next( ES_DIR **ppDir )
+{
+    ES_DIRENT   *direntp = NULL;
+
+    direntp = eLIBs_readdir(*ppDir);
+    if( !(direntp->fatdirattr & FSYS_ATTR_DIRECTORY) )
+    {
+        return direntp->d_name;
+    }
+    else
+    {
+        eLIBs_rewinddir(*ppDir);
+        eLIBs_closedir(*ppDir);
+        *ppDir = NULL;
+        return NULL;
+    }
+} 
+
+
+char* eLIBs_find_first( const char *dirname, ES_DIR **ppDir )
+{
+    ES_DIRENT   *direntp = NULL;
+    ES_DIR      *pDir = NULL;
+
+    pDir = eLIBs_opendir(dirname);
+    if( pDir == NULL )
+    {
+     return "";
+    }
+    eLIBs_rewinddir(pDir);
+
+    direntp = eLIBs_readdir(pDir);
+    if( !(direntp->fatdirattr & FSYS_ATTR_DIRECTORY) )
+    {
+        *ppDir = pDir;
+        return direntp->d_name;
+    }
+    else
+    {
+        eLIBs_rewinddir(pDir);
+        eLIBs_closedir(pDir);
+        *ppDir = NULL;
+        return "";
+    }
+
+}
+
+char* eLIBs_find_next( ES_DIR **ppDir )
+{
+    ES_DIRENT   *direntp = NULL;
+
+    direntp = eLIBs_readdir(*ppDir);
+    if( !(direntp->fatdirattr & FSYS_ATTR_DIRECTORY) )
+    {
+        return direntp->d_name;
+    }
+    else
+    {
+        eLIBs_rewinddir(*ppDir);
+        eLIBs_closedir(*ppDir);
+        *ppDir = NULL;
+        return "";
+    }
+}
+
+char** eLIBs_get_dir_items( const char *dirname, __u32* items )
+{
+	ES_DIR **ppDir, *pDir;
+	char name[100], path[240], *pstr, **pathList;
+	int strLen, cnt = 0;
+	
+	pDir = eLIBs_opendir(dirname);
+	*items = eLIBs_GetNumFiles(pDir);
+	eLIBs_closedir(pDir);
+	if( *items == 0 )
+	{
+	return NULL;
+	}
+	else
+	{
+	pathList = (char**)esMEMS_Balloc( sizeof(char*)*(*items) );
+	}
+	
+	eLibs_strcpy( path, dirname );
+	eLibs_strcpy( name, eLIBs_find_first( dirname, ppDir ) );
+	while( name[0] != '\0')
+	{
+	eLibs_strcat(path, name);
+	strLen = eLibs_strlen(path);
+	pstr = (char*)esMEMS_Balloc( sizeof(char)*strLen );
+	eLibs_strcpy( pstr, path );
+	pathList[cnt++] = pstr;
+	
+	if( *items < cnt )
+	{
+	break;//异常
+	}
+	eLibs_strcpy( name, eLIBs_find_next( ppDir ) );
+	}
+	return pathList;
+} 
+
+*/

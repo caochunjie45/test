@@ -1,0 +1,13 @@
+C700 NOR 开始卡量产和卡升级合并到一起；需要注意以下问题
+
+1、卡量产编译时需要把 宏 BOOT_FROM_SDMMC 打开，重新编译beetles
+2、重编beetles后，把workspace\sunv\beetles\rootfs\apps 目录复制到workspace\sunv\phoenix\rootfs\apps
+3、打包后生成的PHOENIXv100.img，可用PhoenixCardV306_2012_03_02烧写到sd\tf卡内，完成后的卡可用于卡量产
+
+
+4、客户如果需要自己修改卡量产的界面，请参考《卡量应用层补丁.rar》与 宏BOOT_FROM_SDMMC相关的部分
+   相应函数为dsk_start_fw_update（）；具体功能在 fw_update（）函数的内实现
+   
+   
+注：
+   现在的卡量产默认加载HOME后才去做卡量产动作   

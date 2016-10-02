@@ -1,0 +1,27 @@
+;/*
+;*********************************************************************************************************
+;*                                                    eMOD
+;*                                   the Easy Portable/Player Operation System
+;*                                              mod_mmp sub-system
+;*
+;*                                    (c) Copyright 2008-2009, Kevin.Z China
+;*                                              All Rights Reserved
+;*
+;* File    : scatter.sct
+;* By      : Kevin.Z
+;* Version : V1.00
+;*********************************************************************************************************
+;*/
+LO_FIRST 0xe4700000 0x100000
+{
+    EXEC_MOD  0xe4700000                           ;// 内核代码和数据区,其中30是用于存放KRNL_HEAD代码
+    {
+        * (+RO)
+        * (+RW)
+        * (+ZI)
+	}
+    MAGIC  0xFFFF0000
+    {
+        * (MAGIC)
+    }
+}

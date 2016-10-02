@@ -1,0 +1,29 @@
+rocker_man.c merge=ours
+
+*.axf merge=ours
+
+*.bin merge=ours
+
+*.a merge=ours
+
+*.mod merge=ours
+
+*.drv merge=ours
+
+*.plg merge=ours
+
+*.img merge=ours 
+
+melis100.fex merge=ours
+
+verify.fex merge=ours
+
+u-boot.fex merge=ours
+
+ramdisk.iso merge=ours
+
+shell.zgj merge=ours
+
+image.txt merge=ours
+
+upgrade.ini merge=ours

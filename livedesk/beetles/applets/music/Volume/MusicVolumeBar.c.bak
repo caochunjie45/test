@@ -1,0 +1,102 @@
+/*
+**************************************************************************************************************
+*											         ePDK
+*						            the Easy Portable/Player Develop Kits
+*									           desktop system 
+*
+* File    	: 	VolumeBar
+*			
+* By      	: 	Libaiao
+* Func	: 
+* Version	: 	v1.0
+* ============================================================================================================
+* 2010-5-25 15:24:52  Libaiao  create this file, implements the fundemental interface;
+**************************************************************************************************************
+*/
+
+#include "beetles_app.h"
+#include "VolumeBar.h"
+
+
+
+//VolumeBar UI 参数
+typedef struct VolumeBarUI_s
+{
+	RECT Background;		//背景区域大小.(整个VolumeBar的区域大小)	
+							//VolumeBar会根据该参数创建图层
+	__u32 BG_bmp_id;		//背景图片id
+							//下面坐标参数都是相对于Background.(即从0,0开始)
+	RECT LeftSpeaker;		//左边Icon坐标,	
+	__u32 LS_bmp_id;		//左边icon图片ID
+	
+	RECT BarBody;			//音量条body坐标信息	
+	__u32 BB_bmp_id;		//音量条body图片id
+	
+	RECT Point;				//音量条进度点坐标信息
+	__u32 PO_bmp_id;		//进度点图片ID
+	
+	RECT RightSpeaker;		//右边喇叭坐标信息
+	__u32 RS_bmp_id;		//右边喇叭图片id
+	
+	RECT MuteSpeaker;		//静音图标
+	__u32 MS_bmp_id;		//静音图标id号码
+	
+	RECT VolNumber;			//音量数值					
+							//for volume bar private, user doesn't have to initial.				
+}VolumeBarUI_t;
+
+//VolumeBar控制变量参数
+typedef struct VolumeBarCtrlVar_s
+{	
+	__u32 ViewAlign;					//GUI_TA_HORIZONTAL = 水平显示音量条
+										//GUI_TA_VERTICAL   = 垂直显示音量条																																
+	__u32 vol_max;						//最大音量值.(若小于当前系统设置音量，则以该音量为准).	
+	__u32 AutoExitTime;					//自动退出时间，以Second为单位		
+	
+	H_WIN hParent;						//父窗口句柄, should be manager win.
+	H_LYR UserLayer;					//用户图层,当系统已经没有空闲图层通道时，需要传递该参数给VolumeBar(为了透明显示)
+	__s32 Pipe;							//用户可以指定VolumeBar图层的通道.
+		
+}VolumeBarCtrlVar_t;
+
+//事件控制参数
+typedef struct VolumeBarEvent_s
+{
+	__u32 VolAddKey;					//用户指定用那个键响应音量加动作. 比如 = GUI_MSG_KEY_RIGHT
+	__u32 VolDecKey;					//用户指定用那个键响应音量减动作. 比如 = GUI_MSG_KEY_LEFT 
+	__u32 VolExitKey;					//退出音量控制键
+	
+	__s32 (*OnVolAdd)(void *Handle); 	//音量加时,用户的事件处理函数
+	__s32 (*OnVolDec)(void *Handle);	//音量减时,用户的事件处理函数
+	
+}VolumeBarEvent_t;
+
+typedef struct  VolumeBarPara_s
+{		
+	VolumeBarUI_t  			UI;				//音量控制条  UI参数
+	VolumeBarCtrlVar_t		CtrlVar;		//音量控制条  变量控制参数
+	VolumeBarEvent_t        Event;			//音量控制条  事件处理参数
+}VolumeBarPara_t;
+
+
+#define C_MUSIC_VB_HEIGHT			21
+
+const VolumeBarUI_t MusicVolBarUI = {
+		{0,240-21,400,21},					//Background rect
+		0, 													//BG bmp id
+		{0,0,0,0},									//Leftspeaker
+		0,							//leftespeaker icon id
+		{0,0,0,0},					//BarBody rect
+		0,							//BarBody icon id
+		{0,0,0,0},					//Point rect
+		0,							//point icon id
+		{0,0,0,0},					//Rightspeaker
+		0,							//Rightespeaker icon id
+		{0,0,0,0},					//Mutespeaker
+		0,							//Mutespeaker icon id		
+};
+
+
+
+
+

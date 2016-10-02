@@ -1,0 +1,104 @@
+/*
+********************************************************************************
+*                                    eMOD
+*                   the Easy Portable/Player Develop Kits
+*                               mod_cedar sub-system
+*                          (module name, e.g.mpeg4 decoder plug-in) module
+*
+*          (c) Copyright 2010-2012, Allwinner Microelectronic Co., Ltd.
+*                              All Rights Reserved
+*
+* File   : dumpData.c
+* Version: V1.0
+* By     : Eric_wang
+* Date   : 2012-3-31
+* Description:
+********************************************************************************
+*/
+#include "tsDemux_s.h"
+
+#if (DEBUG_DUMPDATA)
+#include "dumpData.h"
+
+__s32 Impl_CDumpData_WriteData(CDumpData *thiz, __u8* pData, __s32 nDataSize)
+{
+    if(thiz->nDumpBufSize - thiz->nCurOffset < nDataSize)
+    {
+        WARNING("DumpBuffer will be full! return! [%d], [%d]\n", thiz->nCurOffset, thiz->nDumpBufSize);
+        return EPDK_FAIL;
+    }
+    memcpy(thiz->pDumpBuf + thiz->nCurOffset, pData, nDataSize);
+    thiz->nCurOffset += nDataSize;
+    return EPDK_OK;
+}
+__s32 Impl_CDumpData_Reinit(CDumpData *thiz)
+{
+    thiz->nCurOffset = 0;
+    memset(thiz->pDumpBuf, 0, thiz->nDumpBufSize);
+    return EPDK_OK;
+}
+
+
+__s32 CDumpData_Init(CDumpData *thiz, __s32 nDumpBufSize)
+{
+    memset(thiz, 0, sizeof(CDumpData));
+    thiz->nDumpBufSize = nDumpBufSize;
+    thiz->Reinit = Impl_CDumpData_Reinit;
+    thiz->WriteData = Impl_CDumpData_WriteData;
+
+    thiz->pDumpBuf = (__s8*)malloc(nDumpBufSize);
+    if(NULL == thiz->pDumpBuf)
+    {
+        WARNING("malloc dumpbuf[%d]bytes fail\n", nDumpBufSize);
+        goto _err0;
+    }
+    memset(thiz->pDumpBuf, 0, nDumpBufSize);
+    return EPDK_OK;
+    
+_err0:
+    return EPDK_FAIL;
+
+}
+__s32 CDumpData_Exit(CDumpData *thiz)
+{
+    if(thiz->pDumpBuf)
+    {
+        free(thiz->pDumpBuf);
+        thiz->pDumpBuf = NULL;
+    }
+    return EPDK_OK;
+}
+CDumpData* newCDumpData(__s32 nDumpBufSize)
+{
+    __s32   ret;
+    CDumpData *pDumpData = malloc(sizeof(CDumpData));
+    if(NULL == pDumpData)
+    {
+        WARNING("malloc CDumpData fail!\n");
+        return NULL;
+    }
+    ret = CDumpData_Init(pDumpData, nDumpBufSize);
+    if(EPDK_OK != ret)
+    {
+        goto _err0;
+    }
+    return pDumpData;
+    
+_err0:
+    free(pDumpData);
+    return NULL;
+}
+
+void deleteCDumpData(CDumpData *thiz)
+{
+    __s32   ret;
+    CDumpData *pDumpData = (CDumpData*)thiz;
+    ret = CDumpData_Exit(pDumpData);
+    if(EPDK_OK!=ret)
+    {
+    }
+    free(pDumpData);
+}
+
+#endif
+
