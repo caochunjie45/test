@@ -71,7 +71,7 @@ static void demod_lock_task(void* p)
             break;
         }
 
-		//WARNING("%s lock judge********\n\n", __func__);
+		//WARNING("%s lock Judge_Month********\n\n", __func__);
 		
         if(ATBM781X_lockstatus() == 0)
         {

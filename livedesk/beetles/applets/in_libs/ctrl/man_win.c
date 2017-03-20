@@ -13,26 +13,19 @@ int Delete_ManWin(Man_Win *ManWin)
 	}
 
 
-	if(NULL == ManWin->windows_head)
+	if(NULL != ManWin->windows_head)
 	{
-		eDbug("ManWin->windows_head is NULL \n");
-		return EPDK_FAIL;
+		Dlist_Destroy(ManWin->windows_head);		
+		ManWin->windows_head  = NULL;
 	}
-
-	
-	Dlist_Destroy(ManWin->windows_head);
-	
-	ManWin->windows_head  = NULL;
 
 	ManWin->focus_windows = NULL;
 
-	if(NULL != ManWin->Logic)
-	{
-		
-		Delete_LogicWin(ManWin->Logic);
-		
-		ManWin->Logic = NULL;
 
+	if(NULL != ManWin->Logic)
+	{		
+		Delete_LogicWin(ManWin->Logic);		
+		ManWin->Logic = NULL;
 	}
 
 
@@ -78,7 +71,7 @@ int Register_ManWin(__u32 ID,Man_Win *ManWin,H_WIN parent,__pGUI_WIN_CB Proc)
 
 	ManWin->id = ID;
 	
-	strcpy(ManWin->name,"app touch");
+	strcpy(ManWin->name,"app manager");
 	
 	ManWin->parent = parent;
 	

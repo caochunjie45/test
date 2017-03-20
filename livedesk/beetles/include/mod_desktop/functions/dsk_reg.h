@@ -112,19 +112,8 @@ typedef struct
     __u32   reserverd[4]; //保留参数设置
 }reg_init_para_t;
 
-/*
-typedef struct
-{
-    __s32   flag; //有效标志
-    __s32   index;//第几个台
-    maple_vd_win_ratio_mode_e mode;
-    maple_serv_list_t service_list;            //这两个参数由中间件保存，
-	maple_serv_item_t service_item[128];//最多128个台
-	__u32   reserverd[8]; //保留参数设置
-	__u32   time_format;//时制，0代表24小时制，1代表12小时制
-	__bool      b_show_subtitle;
-}reg_cmmb_para_t;
-*/
+
+
 typedef struct
 {
 	//__u32   cur_kak_storage;

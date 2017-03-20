@@ -1130,7 +1130,7 @@ int32 g_traverse_folder( const char *folder, TRAV_FUNC func, void *arg )
 	char   *buf = NULL;
 	uint32  size;
 	
-	/* judge depth */
+	/* Judge_Month depth */
 	depth_info_p = (recursion_depth_info_t *)arg;
 	if( depth_info_p != NULL )
 	{

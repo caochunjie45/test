@@ -756,11 +756,23 @@ static __s32  _ProgbarCtrlProc( __gui_msg_t *msg )
     HPGB_t*  hpgb = NULL;
 	H_WIN     hwin;
 	__bool    is_vertical;
+	__s32     new_length;
+	__s32     total_length;
+	__s32     old_length;
 	
 	hwin = msg->h_deswin;
     dwStyle = GUI_WinGetStyle(hwin);
 	is_vertical = ( dwStyle & PGBS_VERTICAL ) ? EPDK_TRUE : EPDK_FALSE;
 	hpgb = (HPGB)GUI_CtrlWinGetAddData( hwin );
+
+
+	if( hpgb != NULL )
+	{
+		total_length = is_vertical ? hpgb->disp_rect.height - hpgb->frame_length : 
+		                         hpgb->disp_rect.width  - hpgb->frame_length;
+		                         		
+		old_length = hpgb->old_length;
+	}
 
     switch(msg->id)
     {
@@ -811,8 +823,227 @@ static __s32  _ProgbarCtrlProc( __gui_msg_t *msg )
 		}
         case GUI_MSG_KEY:
         {
-        	return 0;
+			progbars_attribute_t        *progbars_attribute;
+			
+			progbars_action_t            progbars_action;
+
+			progbars_attribute = (progbars_attribute_t *)GUI_WinGetAttr(hwin);
+			
+			if(NULL == progbars_attribute)
+			{
+				eDbug("progbars_attribute is NULL \n");
+                return 0;
+				
+			}
+			
+			progbars_action = progbars_attribute->progbars_action;
+			
+			
+			switch( msg->dwAddData1 )
+			{
+				
+				case GUI_MSG_KEY_RIGHT:
+				{
+		            switch( msg->dwAddData2)
+		            {
+		            	case KEY_UP_ACTION:
+		            	{
+		            		if(hpgb->last_key == KEY_DOWN_ACTION)
+		            		{
+		            			if ( GUI_WinGetCaptureWin() != hwin )
+								break;
+								
+								GUI_WinReleaseCapture();
+								
+		            			hpgb->last_key = msg->dwAddData2;
+								_notify_parent( hwin, SDN_STOPDRAG, 0 );
+		            		}
+		            		else
+		            		{
+		            			_notify_parent( hwin, SDN_KEY, msg->dwAddData1 );
+		            		}
+		            	}	
+		            	return 0;
+		           
+		            	case KEY_DOWN_ACTION:
+		            	{
+		            		if(hpgb->last_key == KEY_UP_ACTION)
+		            		{
+		            			if( !is_vertical )
+		            			{
+									if ( GUI_WinGetCaptureWin() == hwin )
+		    			    	        break;
+		                			
+		                			GUI_WinSetCaptureWin( hwin );
+		                			
+									new_length = hpgb->old_length + hpgb->line_size;
+									if( new_length > total_length )
+										new_length = total_length;
+										
+									if( new_length != hpgb->old_length )
+									{
+										hpgb->length = new_length;
+										hpgb->value  = _calculate_value( hpgb->min, hpgb->max, hpgb->length, total_length );
+			            				_my_GUI_InvalidateRect( hwin, NULL, ORANGE_TRUE );          // redraw
+			        				}
+			        				
+									hpgb->last_key = msg->dwAddData2;
+			        				/* notify parent msg */
+									_notify_parent( hwin, SDN_STARTDRAG, 0 );//开始拖动
+									if( new_length != old_length )
+									{
+										_notify_parent( hwin, SDN_POS_CHANGED, 0 );//位置已变动
+									}
+		            			}
+		            			else
+		            			{
+		            				_notify_parent( hwin, SDN_KEY, msg->dwAddData1 );
+		            			}
+								
+		            		}
+		            		else
+		            		{
+		            			_notify_parent( hwin, SDN_KEY, msg->dwAddData1 );
+		            		}
+		            	}	
+		            	return 0;
+
+		            	
+		            	default :
+		            	{
+		           			_notify_parent( hwin, SDN_KEY, msg->dwAddData1);
+		           		}
+		            	return 0;
+		            	
+		            }
+                	return 0;
+				}
+
+				
+				case GUI_MSG_KEY_LEFT:
+				{
+		            switch(msg->dwAddData2)
+		            {
+		            	case KEY_UP_ACTION:
+		            	{
+		            		if(hpgb->last_key == KEY_DOWN_ACTION)
+		            		{
+		            			if ( GUI_WinGetCaptureWin() != hwin )
+								break;
+								
+								GUI_WinReleaseCapture();
+								
+		            			hpgb->last_key = msg->dwAddData2;
+								_notify_parent( hwin, SDN_STOPDRAG, 0 );
+		            		}
+		            		else
+		            		{
+		            			_notify_parent( hwin, SDN_KEY, msg->dwAddData1 );
+		            		}
+		            	}	
+		            	return 0;
+
+		           
+		            	case KEY_DOWN_ACTION:
+		            	{
+		            		if(hpgb->last_key == KEY_UP_ACTION)
+		            		{
+		            			if( !is_vertical )
+		            			{
+									if ( GUI_WinGetCaptureWin() == hwin )
+		    			    	        break;
+		                			
+		                			GUI_WinSetCaptureWin( hwin );
+		                			
+									new_length = hpgb->old_length - hpgb->line_size;
+									if( new_length < 0 )
+										new_length = 0;
+										
+									if( new_length != hpgb->old_length )
+									{
+										hpgb->length = new_length;
+										hpgb->value  = _calculate_value( hpgb->min, hpgb->max, hpgb->length, total_length );
+			            				_my_GUI_InvalidateRect( hwin, NULL, ORANGE_TRUE );          // redraw
+			        				}			        			
+									hpgb->last_key = msg->dwAddData2;
+			        				/* notify parent msg */
+									_notify_parent( hwin, SDN_STARTDRAG, 0 );
+									if( new_length != old_length )
+									{
+										_notify_parent( hwin, SDN_POS_CHANGED, 0 );
+									}
+		            			}
+		            			else
+		            			{
+		            				_notify_parent( hwin, SDN_KEY, msg->dwAddData1 );
+		            			}
+								
+		            		}
+		            		else
+		            		{
+		            			_notify_parent( hwin, SDN_KEY, msg->dwAddData1 );
+		            		}
+		            	}	
+		            	return 0;
+		            	
+		            	default:
+		            	{
+		           			_notify_parent( hwin, SDN_KEY, msg->dwAddData1 );
+		           		}
+		            	return 0;
+		            }
+                	return 0;
+				}
+
+						
+				case GUI_MSG_KEY_ESCAPE:
+				case GUI_MSG_KEY_LONGESCAPE:				
+				{
+		            switch( msg->dwAddData2)
+		            {
+		            	case KEY_UP_ACTION:
+		            	{
+					        __gui_msg_t            notifymsg;
+
+							if(NULL == progbars_action.return_action)
+							{
+								eDbug("progbars_action.return_action is NULL \n");
+				                return 0;
+							}
+
+					        notifymsg.h_srcwin     = (__u32)msg->h_deswin;
+					        notifymsg.h_deswin     = GUI_WinGetParent(msg->h_deswin);
+					        notifymsg.id           = GUI_WinGetItemId(msg->h_deswin);
+					        notifymsg.dwAddData1   = 0;
+					        notifymsg.dwAddData2   = 0;
+					        notifymsg.dwReserved   = 0;
+					        notifymsg.p_arg        = NULL;
+
+							progbars_action.return_action(&notifymsg);
+						
+		            	}	
+		            	return 0;
+		           
+		            	case KEY_DOWN_ACTION:
+		            	{
+		            	}	
+		            	return 0;
+		            	
+		            	default :
+		            	{
+		           		}
+		            	return 0;
+		            	
+		            }
+                	return 0;
+				}
+				
+				return 0;
+			}
+			
+	       	return 0;
         }
+		
         case GUI_MSG_TOUCH:
         {
 			return 0;

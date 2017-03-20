@@ -29,12 +29,17 @@ static int Compare_Listbar_ID(void *key, void *data)
 	return *(int *)key - ((listbar_t *)data)->widget_info.id;
 }
 
+static int Compare_Progbars_ID(void *key, void *data)
+{
+	return *(int *)key - ((progbars_t *)data)->widget_info.id;
+}
 
 
 
 int Get_Windows_Ctrl_Number(windows_t *Windows)
 {
 	int num = 0;
+
 
 	if(NULL != Windows->button_head)
 	{
@@ -55,6 +60,12 @@ int Get_Windows_Ctrl_Number(windows_t *Windows)
 	{
 		num += Windows->listbar_head->cnt;
 	}
+
+	if(NULL != Windows->progbars_head)
+	{
+		num += Windows->progbars_head->cnt;
+	}
+
 
 	eDbug("Windows ctrl number is %d \n",num);
 	
@@ -117,6 +128,18 @@ int Search_All_Windows_Element(__u32 ID,windows_t *Windows,__u8 *Ctrl_Type)
 		{
 			*Ctrl_Type = TYPE_LISTBAR;
 			eDbug("this ID is a listbar,is the %d element \n",ret);
+			return ret;
+		}			
+	}
+
+	if(NULL != Windows->progbars_head)
+	{
+		
+		ret = Dlist_Check_Element(Windows->progbars_head,&ID,esKRNL_GetCallBack(Compare_Progbars_ID));
+		if(-1 != ret)
+		{
+			*Ctrl_Type = TYPE_PROGBARS;
+			eDbug("this ID is a progbars_head,is the %d element \n",ret);
 			return ret;
 		}			
 	}
@@ -1331,11 +1354,21 @@ int Delete_Windows(void *data)
 		Windows->focus_listbar = NULL;
 	}
 
+	if(NULL != Windows->progbars_head)
+	{
+		Dlist_Destroy(Windows->progbars_head);
+		Windows->progbars_head  = NULL;
+		Windows->focus_progbars = NULL;
+	}
+
+
 	if(NULL != Windows->layer)
 	{
 		GUI_LyrWinDelete(Windows->layer);
 		Windows->layer = NULL;
 	}
+
+
 
 	In_Free(Windows,sizeof(windows_t));
 
@@ -1384,6 +1417,15 @@ int Register_Windows(__u32 ID,Man_Win *ManWin,__pCBK_t callback,int x,int y,int 
 	
 	windows_t *Windows = NULL;
 
+
+	ret = Dlist_Find(ManWin->windows_head,&ID,esKRNL_GetCallBack(Compare_Windows_ID));
+	if(EPDK_FAIL != ret)
+	{
+		eDbug("windows have been register \n");
+		return EPDK_OK;
+	}
+
+	
 	Windows = In_Malloc(sizeof(windows_t));
 	if(NULL == Windows)
 	{
@@ -1468,6 +1510,18 @@ int Register_Windows(__u32 ID,Man_Win *ManWin,__pCBK_t callback,int x,int y,int 
 	}
 	
 	Windows->listbar_focus_id = 0;
+
+
+	Windows->progbars_head   = Create_Progbars_List();
+	if(NULL == Windows->progbars_head)
+	{
+		eDbug("Windows->progbars_head is NULL \n");
+		return EPDK_FAIL;
+	}
+	
+	Windows->progbars_focus_id = 0;
+
+
 
 	Windows->window_state = WINDOWS_SLEEP;
 	

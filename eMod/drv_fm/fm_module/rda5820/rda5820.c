@@ -260,12 +260,12 @@ __s32  fm_auto_search(__s32 freq, __u32 search_dir)
         //__inf("    freq = %d\n", freq);
         if((wfm_data[0] & 0x01) && (freq != 96000))
         {
-            //__inf("     auto judge\n");
+            //__inf("     auto Judge_Month\n");
             return freq;
         }
         if(flag)
         {
-            //_inf("     my judge\n");
+            //_inf("     my Judge_Month\n");
             return freq;
         }
 

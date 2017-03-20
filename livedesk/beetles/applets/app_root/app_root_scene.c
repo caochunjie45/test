@@ -33,7 +33,7 @@
 #if EXTERN_KARAOKE_EXIST
 #include "karaoke/app_karaoke.h"
 #endif
-#include "dtv/dtv_i.h"
+#include "dtv/apps_i.h"
 
 #if BEETLES_LINEIN_DETECT
 typedef struct tag_root_globe_check
@@ -1790,7 +1790,7 @@ if((RAT_TF == temp_root) || (0 == root_type))
 				ntymsg.id			=  GUI_MSG_COMMAND;
 				ntymsg.h_srcwin 	=  msg->h_deswin;
 				ntymsg.h_deswin 	=  GUI_WinGetHandFromName("APP_DTV"); 
-				ntymsg.dwAddData1	=  CMD_FS_PART_PLUGOUT;
+				ntymsg.dwAddData1	=  0;
 				ntymsg.dwAddData2	=  NULL;
 				ntymsg.dwReserved	=  NULL;
 				

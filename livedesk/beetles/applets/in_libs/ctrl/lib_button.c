@@ -303,6 +303,15 @@ int Register_Button(__u32 ID,windows_t *Windows,button_ui_t *button_ui)
 	
 	button_t *button = NULL;
 
+
+	ret = Dlist_Find(Windows->button_head,&ID,esKRNL_GetCallBack(Compare_ID));
+	if(EPDK_FAIL != ret)
+	{
+		eDbug("button have been register \n");
+		return EPDK_OK;
+	}
+
+
 	button = In_Malloc(sizeof(button_t));
 	if(NULL == button)
 	{

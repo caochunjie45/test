@@ -575,6 +575,15 @@ int Register_Listbar(__u32 ID,windows_t *Windows,listbar_ui_t *listbar_ui,__u8 f
 	
 	listbar_t *listbar = NULL;
 
+	ret = Dlist_Find(Windows->listbar_head,&ID,esKRNL_GetCallBack(Compare_ID));
+	if(EPDK_FAIL != ret)
+	{
+		eDbug("listbar have been register \n");
+		return EPDK_OK;
+	}
+
+
+
 	listbar = In_Malloc(sizeof(listbar_t));
 	if(NULL == listbar)
 	{

@@ -121,6 +121,8 @@ typedef struct
 
 
 
+
+
 typedef struct
 {
 	__u32                       focus_bmp;
@@ -128,7 +130,6 @@ typedef struct
 	__u32                       unfocus_bmp;
 	
 }bmp_listbar_t;
-
 
 
 typedef struct

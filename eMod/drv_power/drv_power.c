@@ -2673,7 +2673,7 @@ __s32 DRV_Power_MInit(void)
 
     hstr.slave_addr         = POWER_BOARD1_DEV_ADDR_19;
     hstr.slave_addr_flag    = TWI_SLAVE_ADDRESS_07BIT;
-    byte_addr          = 0x3; //judge the AXP19X exist or not,slave addr 0x68 and 0x0c REG value lower  than  0100
+    byte_addr          = 0x3; //Judge_Month the AXP19X exist or not,slave addr 0x68 and 0x0c REG value lower  than  0100
     hstr.byte_addr  = &byte_addr;
     hstr.byte_addr_width    = 1;  // reg_addr is 1 byte
     hstr.data               = &tmp_value;
@@ -2681,7 +2681,7 @@ __s32 DRV_Power_MInit(void)
 
     if(EPDK_FAIL == eLIBs_fioctrl(powerdrv.power_dev.iic_file, TWI_READ_SPEC_RS, 0, &hstr))                //访问失败，表明无AXP19/17存在？
     {
-        __inf("IIC read 0x68 REGISTER 0x03 fail,to judge the tmp_value = %x\n",tmp_value);
+        __inf("IIC read 0x68 REGISTER 0x03 fail,to Judge_Month the tmp_value = %x\n",tmp_value);
         hstr.slave_addr         = POWER_BOARD1_DEV_ADDR_18;
         if(EPDK_FAIL == eLIBs_fioctrl(powerdrv.power_dev.iic_file, TWI_READ_SPEC_RS, 0, &hstr))            //访问失败，表明无PMU axp18 存在？
         {
@@ -2690,7 +2690,7 @@ __s32 DRV_Power_MInit(void)
         }
         else if((tmp_value & 0x0f) > 0x07)
         {
-            __inf("IIC read 0x2c REGISTER 0x03 sucess,to judge the tmp_value = %x\n",tmp_value);
+            __inf("IIC read 0x2c REGISTER 0x03 sucess,to Judge_Month the tmp_value = %x\n",tmp_value);
             PMU_type = 1;   //AXP18X
         }
         else
@@ -2700,12 +2700,12 @@ __s32 DRV_Power_MInit(void)
     }
     else if((tmp_value & 0x0f)  == 0x01)                                                        
    {
-        __inf("IIC read 0x68 REGISTER 0x03 sucess,to judge the tmp_value = %x\n",tmp_value);
+        __inf("IIC read 0x68 REGISTER 0x03 sucess,to Judge_Month the tmp_value = %x\n",tmp_value);
         PMU_type = 3;               //AXP20X
    }
     else
     {
-        __inf("IIC read 0x68 REGISTER 0x03 sucess,to judge the tmp_value = %x\n",tmp_value); //访问成功，表明AXP19/17存在？
+        __inf("IIC read 0x68 REGISTER 0x03 sucess,to Judge_Month the tmp_value = %x\n",tmp_value); //访问成功，表明AXP19/17存在？
         PMU_type = 2;
     }
     __inf("PMU type  = %x\n",PMU_type);

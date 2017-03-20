@@ -21,7 +21,7 @@ int Get_Progbars_Source(progbars_info_t *progbars_info,__u32 ID,progbars_ui_t *p
 
 	progbars_info->head_bmp    = theme_open(progbars_ui->bmp_progbars.head_bmp);
 	progbars_info->tail_bmp    = theme_open(progbars_ui->bmp_progbars.tail_bmp);
-	progbars_info->frame_bmp  = theme_open(progbars_ui->bmp_progbars.frame_bmp);
+	progbars_info->frame_bmp   = theme_open(progbars_ui->bmp_progbars.frame_bmp);
 	
 	progbars_info->progbars_attribute.progbars_paint.head_bmp_buf   = theme_hdl2buf(progbars_info->head_bmp);
 	progbars_info->progbars_attribute.progbars_paint.tail_bmp_buf   = theme_hdl2buf(progbars_info->tail_bmp);

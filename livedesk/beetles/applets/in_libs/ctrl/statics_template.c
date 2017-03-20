@@ -63,6 +63,7 @@ int Get_Statics_Source(statics_info_t *statics_info,__u32 ID,statics_ui_t *stati
 		statics_info->string_totals = statics_ui->string_total;
 	}
 
+
 	if(statics_ui->bmp_total > 0)
 	{
 		statics_info->statics_attribute.statics_paint.focus_bmp   = theme_hdl2buf(statics_info->bmp_data[0]);

@@ -552,7 +552,7 @@ static void demod_lock_task(void* p)
             break;
         }
 
-		__msg("%s lock judge********\n\n", __func__);
+		__msg("%s lock Judge_Month********\n\n", __func__);
 		
         if(dib_lockstatus() == 0)
         {

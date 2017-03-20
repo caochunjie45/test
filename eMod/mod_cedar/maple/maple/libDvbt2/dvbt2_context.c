@@ -1516,7 +1516,7 @@ __s32 PmtFillServItem(maple_serv_item_t *pServItem, PMTInfo *pPmtInfoForSearch, 
         else if(pServItem->subtitleStreamNum > 0)
             pServItem->servType = MAPLE_SERV_TYPE_TELETEXT;
 
-        WARNING("when pmt parse, service type still unknow, judge service type from es streams numbers, servtype[%d]\n", pServItem->servType);
+        WARNING("when pmt parse, service type still unknow, Judge_Month service type from es streams numbers, servtype[%d]\n", pServItem->servType);
     }
     return EPDK_OK;
 }
@@ -3785,7 +3785,7 @@ DListRet DListDataVisitFunc_SDTAddService(void* ctx, void* data)   //ctx = maple
 									pServList->pServItems[pServList->servNum].servType = MAPLE_SERV_TYPE_UNKNOWN;
 	                break;
             default:
-                WARNING("parse sdt section, service type unknow, judge service type from es streams numbers.");
+                WARNING("parse sdt section, service type unknow, Judge_Month service type from es streams numbers.");
                 break;
         }
         pServList->servNum++;

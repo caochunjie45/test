@@ -40,6 +40,10 @@
 #define PGBS_VERTICAL                    ( 1 << 16 )
 
 
+
+
+
+
 typedef enum
 {
     PROGBAR_TEXT_TYPE_NONE = 0,         // don't show text

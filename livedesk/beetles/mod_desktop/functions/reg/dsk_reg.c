@@ -22,7 +22,7 @@ typedef struct
 	reg_record_para_t   record_para;
 	//reg_calendar_para_t calendar_para;    
 	//reg_dv_para_t		dv_para ;	
-	//reg_cmmb_para_t cmmb_para; 
+
 }reg_app_para_t;
 
 typedef struct  

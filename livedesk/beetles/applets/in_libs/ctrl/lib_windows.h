@@ -20,6 +20,7 @@ extern dlist_t *Create_Slider_List(void);
 
 extern dlist_t *Create_Listbar_List(void);
 
+extern dlist_t *Create_Progbars_List(void);
 
 
 

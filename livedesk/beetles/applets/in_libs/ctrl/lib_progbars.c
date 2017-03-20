@@ -9,6 +9,7 @@ static int Compare_ID(void *key, void *data)
 }
 
 
+
 int Set_Progbars_Return_CallBack(__u32 progbars_ID,windows_t *Windows,__pCBK_t Progbars_Return)
 {
 	__u8 ret;
@@ -41,98 +42,6 @@ int Set_Progbars_Return_CallBack(__u32 progbars_ID,windows_t *Windows,__pCBK_t P
 
 	return EPDK_OK;
 }
-
-
-int Set_Progbars_Enter_CallBack(__u32 progbars_ID,windows_t *Windows,__pCBK_t Progbars_Enter)
-{
-	__u8 ret;
-
-	progbars_t progbars;
-
-	dlist_t *list = Windows->progbars_head;
-
-	if(NULL == list)
-	{
-		eDbug("list is NULL \n");
-		return EPDK_FAIL;
-	}
-
-
-	ret = Dlist_Find_Element(list,&progbars,&progbars_ID,esKRNL_GetCallBack(Compare_ID));
-	if(-1 == ret)
-	{
-		return EPDK_FAIL;
-	}
-
-	progbars.progbars_info.progbars_attribute.progbars_action.enter_action = Progbars_Enter;
-
-
-	ret = Dlist_Modify(list,&progbars,ret);
-	if(-1 == ret)
-	{
-		return EPDK_FAIL;
-	}
-
-	return EPDK_OK;
-}
-
-
-
-
-int Set_Progbars_HostedFrom_Button_Return_CallBack(__u32 progbars_ID,windows_t *Windows,__pCBK_t Progbars_Return)
-{
-	__u8 ret;
-
-	Mixed_CtrlWin_T *pHosted = NULL;
-
-	
-	if(NULL == Windows)
-	{
-		eDbug("Windows is NULL \n");
-		return EPDK_FAIL;
-	}
-
-	if(NULL == Windows->button_head)
-	{
-		eDbug("Windows->button_head is NULL \n");
-		return EPDK_FAIL;
-	}
-
-
-	if(NULL == Windows->focus_button)
-	{
-		eDbug("Windows->focus_button is NULL \n");
-		return EPDK_FAIL;
-	}
-
-	if(NULL == Windows->focus_button->pFirstHosted)
-	{
-		eDbug("Windows->focus_button->pFirstHosted is NULL \n");
-		return EPDK_FAIL;
-	}
-
-	pHosted = Find_Hosted_Win(Windows->focus_button->pFirstHosted,progbars_ID);
-
-	if(NULL == pHosted)
-	{
-		eDbug("can't find the hosted win \n");
-		return EPDK_FAIL;
-	}
-
-
-	if(TYPE_PROGBARS != pHosted->type_ctrl)
-	{
-		eDbug("the ctrlwin type is error \n");
-		return EPDK_FAIL;
-	}
-
-
-	pHosted->mix_ctrl.Progbars.progbars_info.progbars_attribute.progbars_action.return_action = Progbars_Return;
-
-
-	return EPDK_OK;
-}
-
 
 
 
@@ -288,6 +197,15 @@ int Register_Progbars(__u32 ID,windows_t *Windows,progbars_ui_t *progbars_ui)
 	
 	progbars_t *progbars = NULL;
 
+
+	ret = Dlist_Find(Windows->progbars_head,&ID,esKRNL_GetCallBack(Compare_ID));
+	if(EPDK_FAIL != ret)
+	{
+		eDbug("progbars have been register \n");
+		return EPDK_OK;
+	}
+
+
 	progbars = In_Malloc(sizeof(progbars_t));
 	if(NULL == progbars)
 	{
@@ -308,12 +226,12 @@ int Register_Progbars(__u32 ID,windows_t *Windows,progbars_ui_t *progbars_ui)
 		return EPDK_FAIL;
 	}
 	
-	//ret = PROGBAR_SetLineSize(progbars->ctrlwin,10);
-	//if(EPDK_FAIL == ret)
-	//{
-	//	eDbug("progbars SetLineSize failed \n");
-	//	return EPDK_FAIL;
-	//}
+	ret = PROGBAR_SetLineSize(progbars->ctrlwin,10);
+	if(EPDK_FAIL == ret)
+	{
+		eDbug("progbars SetLineSize failed \n");
+		return EPDK_FAIL;
+	}
 	
 	ret = PROGBAR_SetValue(progbars->ctrlwin,3);
 	if(EPDK_FAIL == ret)
@@ -383,12 +301,12 @@ int Register_Progbars_HostedFrom_Button(__u32 ID,windows_t *Windows,progbars_ui_
 		return EPDK_FAIL;
 	}
 	
-	//ret = PROGBAR_SetLineSize(mixctrl->mix_ctrl.Progbars.ctrlwin,10);
-	//if(EPDK_FAIL == ret)
-	//{
-	//	eDbug("progbars SetLineSize failed \n");
-	//	return EPDK_FAIL;
-	//}
+	ret = PROGBAR_SetLineSize(mixctrl->mix_ctrl.Progbars.ctrlwin,10);
+	if(EPDK_FAIL == ret)
+	{
+		eDbug("progbars SetLineSize failed \n");
+		return EPDK_FAIL;
+	}
 
 	
 	ret = PROGBAR_SetValue(mixctrl->mix_ctrl.Progbars.ctrlwin,10);

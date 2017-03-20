@@ -1374,7 +1374,7 @@ __s32 PmtFillServItem(maple_serv_item_t *pServItem, PMTInfo *pPmtInfoForSearch, 
         else if(pServItem->subtitleStreamNum > 0)
             pServItem->servType = MAPLE_SERV_TYPE_TELETEXT;
 
-        eDbug("when pmt parse, service type still unknow, judge service type from es streams numbers, servtype[%d]\n", pServItem->servType);
+        eDbug("when pmt parse, service type still unknow, Judge_Month service type from es streams numbers, servtype[%d]\n", pServItem->servType);
     }
     return EPDK_OK;
 }
@@ -2857,7 +2857,7 @@ static __s32 isdb_parse_sdt_section0(maple_serv_list_t *servList, SDTInfo *pSDTI
                 //* here we jude service type with
                 if(curServItem->servType == MAPLE_SERV_TYPE_UNKNOWN)
                 {
-                    eDbug("parse sdt section, service type unknow, judge service type from es streams numbers.");
+                    eDbug("parse sdt section, service type unknow, Judge_Month service type from es streams numbers.");
                     if(curServItem->vdStreamNum > 0)
                         curServItem->servType = MAPLE_SERV_TYPE_TV;
                     else if(curServItem->adStreamNum > 0)

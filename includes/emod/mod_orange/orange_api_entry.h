@@ -508,6 +508,7 @@ typedef struct ORANGEMOD_API_ENTRY
 	__s32             (*ptr_GUI_SpinboxSetDownBmpPos)(H_WIN hspin,__pos_t *pos);
 	__bool            (*ptr_RegisterProgbarControl)( void );                         
 	__s32             (*ptr_PROGBAR_SetRange   )( H_WIN hwin, __s32 min, __s32 max );
+	__s32             (*ptr_PROGBAR_SetLineSize)( H_WIN hwin, __u32 line_size );
 	__s32             (*ptr_PROGBAR_SetValue   )( H_WIN hwin, __s32 value );         
 	__s32             (*ptr_PROGBAR_GetMin     )( H_WIN hwin );                      
 	__s32             (*ptr_PROGBAR_GetMax     )( H_WIN hwin );                      
@@ -1035,6 +1036,7 @@ typedef struct ORANGEMOD_API_ENTRY
 #define GUI_SpinboxSetDownBmpPos                       	(ORANGEMOD_FUNC_ENTRY->ptr_GUI_SpinboxSetDownBmpPos	)
 #define RegisterProgbarControl                         	(ORANGEMOD_FUNC_ENTRY->ptr_RegisterProgbarControl	)	/*progbar*/
 #define PROGBAR_SetRange                               	(ORANGEMOD_FUNC_ENTRY->ptr_PROGBAR_SetRange   	)
+#define PROGBAR_SetLineSize                             (ORANGEMOD_FUNC_ENTRY->ptr_PROGBAR_SetLineSize  )
 #define PROGBAR_SetValue                               	(ORANGEMOD_FUNC_ENTRY->ptr_PROGBAR_SetValue   	)
 #define PROGBAR_GetMin                                 	(ORANGEMOD_FUNC_ENTRY->ptr_PROGBAR_GetMin     	)
 #define PROGBAR_GetMax                                 	(ORANGEMOD_FUNC_ENTRY->ptr_PROGBAR_GetMax     	)

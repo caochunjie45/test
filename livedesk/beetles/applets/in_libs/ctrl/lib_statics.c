@@ -44,6 +44,40 @@ int Set_Statics_Bmp(__u32 statics_ID,windows_t *Windows,__u32 bmp_index)
 
 }
 
+
+int Set_Statics_Text(__u32 statics_ID,windows_t *Windows,char *text,__u32 text_index)
+{
+	__u8 ret;
+
+	statics_t statics;
+	
+	dlist_t *list = Windows->statics_head;
+
+	if(NULL == list)
+	{
+		eDbug("list is NULL \n");
+		return EPDK_FAIL;
+	}
+
+
+	ret = Dlist_Find_Element(list,&statics,&statics_ID,esKRNL_GetCallBack(Compare_ID));
+	if(-1 == ret)
+	{
+		return EPDK_FAIL;
+	}
+
+
+	eLIBs_strncpy(statics.statics_info.strings[text_index],text,STRING_MAX);
+	
+	GUI_StaticSetText(statics.ctrlwin,statics.statics_info.strings[text_index]);
+
+	
+	return EPDK_OK;
+
+}
+
+
+
 int Create_Statics(__u32 statics_id,H_WIN patent,statics_t *statics,statics_ui_t *statics_ui)
 {
 	int ret;
@@ -197,6 +231,15 @@ int Register_Statics(__u32 ID,windows_t *Windows,statics_ui_t *statics_ui)
 	__u8 ret;
 	
 	statics_t *statics  = NULL;
+
+
+	ret = Dlist_Find(Windows->statics_head,&ID,esKRNL_GetCallBack(Compare_ID));
+	if(EPDK_FAIL != ret)
+	{
+		eDbug("statics have been register \n");
+		return EPDK_OK;
+	}
+
 
 	statics = In_Malloc(sizeof(statics_t));
 	if(NULL == statics)

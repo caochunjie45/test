@@ -10,7 +10,7 @@
 
 
 
-int Set_Progbars_HostedFrom_Button_Return_CallBack(__u32 progbars_ID,windows_t *Windows,__pCBK_t Progbars_Return);
+int Set_Progbars_Return_CallBack(__u32 progbars_ID,windows_t *Windows,__pCBK_t Progbars_Return);
 
 dlist_t *Create_Progbars_List(void);
 

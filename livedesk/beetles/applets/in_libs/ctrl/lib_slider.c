@@ -286,6 +286,14 @@ int Register_Slider(__u32 ID,windows_t *Windows,slider_ui_t *slider_ui)
 	
 	slider_t *slider = NULL;
 
+	ret = Dlist_Find(Windows->slider_head,&ID,esKRNL_GetCallBack(Compare_ID));
+	if(EPDK_FAIL != ret)
+	{
+		eDbug("slider have been register \n");
+		return EPDK_OK;
+	}
+
+
 	slider = In_Malloc(sizeof(slider_t));
 	if(NULL == slider)
 	{

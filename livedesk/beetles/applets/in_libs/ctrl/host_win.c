@@ -194,8 +194,18 @@ int destory_Hosting_Win(Mixed_CtrlWin_T **pFirstHosted)
 				move->destory(&(move->mix_ctrl.Listbar));
 			}
 			break;
+
+			case TYPE_PROGBARS:
+			{
+				move->destory(&(move->mix_ctrl.Progbars));
+			}
+			break;
 			
-			default:break;
+			default:
+			{
+
+			}
+			break;
 		}
 		
 		In_Free(move,sizeof(Mixed_CtrlWin_T));
@@ -249,23 +259,36 @@ int destory_Last_Hosted_Win(Mixed_CtrlWin_T **pFirstHosted)
 			pHosted->destory(&(pHosted->mix_ctrl.Button));
 		}
 		break;
+		
 		case TYPE_SLIDER:
 		{
 			pHosted->destory(&(pHosted->mix_ctrl.Slider));			
 		}
 		break;
+		
 		case TYPE_STATICS:
 		{
 			pHosted->destory(&(pHosted->mix_ctrl.Statics));			
 		}
 		break;
+		
 		case TYPE_LISTBAR:
 		{
 			pHosted->destory(&(pHosted->mix_ctrl.Listbar));
 		}
 		break;
+
+		case TYPE_PROGBARS:
+		{
+			pHosted->destory(&(pHosted->mix_ctrl.Progbars));
+		}
+		break;
 		
-		default:break;
+		default:
+		{
+
+		}
+		break;
 	}
 
 	eDbug("pHosted is 0x%x \n",pHosted);

@@ -458,8 +458,8 @@ void RDA5807P_SetFreq( int16 curFreq )
 }
 
 /**
- * @brief Station judge for auto search
- * @In auto search mode,uses this function to judge the frequency if has a station
+ * @brief Station Judge_Month for auto search
+ * @In auto search mode,uses this function to Judge_Month the frequency if has a station
  * @author RDA Ri'an Zeng
  * @date 2008-11-05
  * @param int16 freq:frequency value
